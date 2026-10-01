@@ -1,51 +1,21 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Emissão e download de certidões para empresas em Santa Catarina." />
-  <title>Certidões SC</title>
-  <link rel="stylesheet" href="/styles.css" />
-</head>
-<body>
-  <main class="shell">
-    <section class="hero">
-      <div class="eyebrow"><span class="pulse"></span> TransferSC · módulo de conformidade</div>
-      <h1>Certidões SC,<br /><em>sem perder tempo.</em></h1>
-      <p class="lead">Consulte os portais oficiais e baixe os documentos em uma única operação.</p>
-      <div class="security-note"><span>⌁</span> Seus dados são usados somente durante esta consulta e não ficam salvos nesta interface.</div>
-    </section>
-
-    <section class="panel">
-      <form id="form">
-        <div class="section-label">01 — Identificação</div>
-        <div class="fields">
-          <label>CPF ou CNPJ
-            <input id="documento" name="documento" placeholder="00.000.000/0000-00" autocomplete="off" required />
-            <small>Informe somente um documento por consulta.</small>
-          </label>
-          <label>CPF do solicitante SEF-SC
-            <input id="cpf_solicitante" name="cpf_solicitante" placeholder="000.000.000-00" autocomplete="off" />
-            <small>Necessário para a CND Estadual SC.</small>
-          </label>
-        </div>
-        <div class="section-label space-top">02 — Documentos</div>
-        <div class="checks">
-          <label class="check"><input type="checkbox" name="certidoes" value="estadual" checked /><span class="box">✓</span><span><strong>CND Estadual SC</strong><small>SEF-SC · validade de 180 dias</small></span></label>
-          <label class="check"><input type="checkbox" name="certidoes" value="cndt" checked /><span class="box">✓</span><span><strong>CNDT Trabalhista</strong><small>TST · validade de 180 dias</small></span></label>
-          <label class="check"><input type="checkbox" name="certidoes" value="fgts" checked /><span class="box">✓</span><span><strong>CRF / FGTS</strong><small>Caixa · somente CNPJ</small></span></label>
-        </div>
-        <button id="submit" type="submit"><span>Emitir e baixar certidões</span><b>↗</b></button>
-      </form>
-    </section>
-
-    <section id="status" class="status" hidden></section>
-    <section id="results" class="results" hidden>
-      <div class="results-head"><div><div class="section-label">Resultado da consulta</div><h2>Documentos disponíveis</h2></div><span id="result-count" class="count"></span></div>
-      <div id="result-list"></div>
-    </section>
-    <footer>Protótipo · fontes oficiais dos órgãos emissores · não substitui a validação do edital</footer>
-  </main>
-  <script src="/app.js"></script>
-</body>
-</html>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Emissão e download de certidões para empresas em Santa Catarina." /><title>Certidões SC</title><link rel="stylesheet" href="/styles.css" /></head>
+<body><main class="shell">
+<section class="hero"><div class="eyebrow"><span class="pulse"></span> TransferSC · módulo de conformidade</div><h1>Certidões SC,<br /><em>sem perder tempo.</em></h1><p class="lead">Consulte os portais oficiais e baixe os documentos em uma única operação.</p><div class="security-note"><span>⌁</span> Seus dados são usados somente durante esta consulta e não ficam salvos nesta interface.</div></section>
+<section class="panel"><form id="form">
+<div class="section-label">01 — Identificação</div><div class="fields"><label>CPF ou CNPJ<input id="documento" name="documento" placeholder="00.000.000/0000-00" autocomplete="off" required /><small>Informe somente um documento por consulta.</small></label><label>CPF do solicitante SEF-SC<input id="cpf_solicitante" name="cpf_solicitante" placeholder="000.000.000-00" autocomplete="off" /><small>Necessário para a CND Estadual SC.</small></label></div>
+<div class="section-label space-top">02 — Documentos obrigatórios e complementares</div><div class="checks">
+<label class="check"><input type="checkbox" name="certidoes" value="federal" checked /><span class="box">✓</span><span><strong>CND Federal</strong><small>RFB + PGFN · 180 dias</small></span></label>
+<label class="check"><input type="checkbox" name="certidoes" value="estadual" checked /><span class="box">✓</span><span><strong>CND Estadual SC</strong><small>SEF-SC · 180 dias</small></span></label>
+<label class="check"><input type="checkbox" name="certidoes" value="cndt" checked /><span class="box">✓</span><span><strong>CNDT Trabalhista</strong><small>TST · 180 dias</small></span></label>
+<label class="check"><input type="checkbox" name="certidoes" value="fgts" checked /><span class="box">✓</span><span><strong>CRF / FGTS</strong><small>Caixa · CNPJ</small></span></label>
+<label class="check"><input type="checkbox" name="certidoes" value="municipal" /><span class="box">✓</span><span><strong>CND Municipal Betha</strong><small>ISS e tributos locais</small></span></label>
+<label class="check"><input type="checkbox" name="certidoes" value="pge" /><span class="box">✓</span><span><strong>Dívida Ativa SC</strong><small>PGE · opcional</small></span></label>
+<label class="check"><input type="checkbox" name="certidoes" value="pmf" /><span class="box">✓</span><span><strong>Municipal Florianópolis</strong><small>PMF · sistema próprio</small></span></label>
+<label class="check"><input type="checkbox" name="certidoes" value="falencia" /><span class="box">✓</span><span><strong>Falência e recuperação</strong><small>TJ-SC · comarca sede</small></span></label>
+</div>
+<label class="municipio-label">Município Betha <select id="municipio" name="municipio"><option value="joinville">Joinville</option><option value="blumenau">Blumenau</option><option value="criciuma">Criciúma</option><option value="chapeco">Chapecó</option><option value="itajai">Itajaí</option><option value="jaragua">Jaraguá do Sul</option><option value="palhoca">Palhoça</option><option value="saojose">São José</option><option value="lages">Lages</option><option value="balneariocamboriu">Balneário Camboriú</option><option value="tubarao">Tubarão</option></select><small>Usado somente se CND Municipal Betha estiver selecionada.</small></label>
+<button id="submit" type="submit"><span>Emitir e baixar certidões</span><b>↗</b></button></form></section>
+<section id="status" class="status" hidden></section><section id="results" class="results" hidden><div class="results-head"><div><div class="section-label">Resultado da consulta</div><h2>Documentos disponíveis</h2></div><span id="result-count" class="count"></span></div><div id="result-list"></div></section><footer>Fontes oficiais dos órgãos emissores · confirme as exigências do edital</footer>
+</main><script src="/app.js"></script></body></html>
