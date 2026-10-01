@@ -85,7 +85,7 @@ class CertidaoFalencia(PortalManualFetcher):
         super().__init__(
             documento,
             "Falência e Recuperação Judicial (TJ-SC)",
-            "https://www.tjsc.jus.br/",
+            "https://certidoes.tjsc.jus.br/",
             "A emissão depende da comarca sede e do distribuidor judicial. Selecione a comarca no portal do TJ-SC.",
             output_dir,
         )
