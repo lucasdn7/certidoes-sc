@@ -1,9 +1,7 @@
 
 
-## Escopo completo do anexo
+## Fluxo híbrido com CAPTCHA e certificado
 
-A interface agora contempla CND Federal RFB/PGFN, CND Estadual SC, CNDT, CRF/FGTS, Dívida Ativa Estadual PGE-SC, CND Municipal Betha com seleção de município, CND Municipal de Florianópolis e certidão de falência/recuperação judicial do TJ-SC.
+Na tela de resultados, documentos que não puderem ser baixados automaticamente terão os botões **Abrir portal oficial** e **Anexar PDF emitido**. O botão do portal copia o CNPJ e abre o endereço oficial em uma nova aba. Depois de resolver CAPTCHA, fazer login ou usar certificado digital no portal do órgão, baixe o PDF e volte à aplicação para anexá-lo.
 
-A CND Estadual SC é o módulo que possui emissão/download automático na API atual. Os demais módulos que dependem de CAPTCHA, certificado digital, bloqueio anti-robô, comarca ou layout municipal específico retornam `ACAO_MANUAL` com link oficial. Isso é intencional: a aplicação não tenta contornar controles dos órgãos e não gera um arquivo sem confirmação oficial.
-
-Para a emissão municipal, selecione o município Betha correspondente ao estabelecimento. Para falência/recuperação, a comarca sede precisa ser escolhida no tribunal competente. A necessidade de PGE-SC deve ser confirmada no edital, pois a CND da SEF-SC normalmente cobre a regularidade tributária estadual.
+O formulário de anexação valida o tipo PDF e permite registrar número da certidão, data de emissão e validade em dias. O status fica como `REGISTRADA` e os metadados são guardados no navegador via `localStorage`, separados por documento e certidão. Nesta etapa, o PDF anexado permanece disponível somente na sessão atual do navegador; armazenamento permanente em Supabase Storage ou Vercel Blob deve ser configurado antes de uso institucional.

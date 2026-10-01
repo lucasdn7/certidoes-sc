@@ -66,6 +66,7 @@ class handler(BaseHTTPRequestHandler):
                         resultado = make_fetcher(tipo, documento, cpf, municipio, pasta).buscar()
                     except Exception as exc:
                         resultado = {"certidao": tipo, "status": "ERRO", "erro": str(exc)}
+                    resultado["tipo"] = tipo
                     arquivo = resultado.get("arquivo")
                     if arquivo and Path(arquivo).exists():
                         path = Path(arquivo)
