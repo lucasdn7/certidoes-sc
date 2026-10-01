@@ -11,6 +11,7 @@ class CrfFgts(CertidaoFetcher):
     nome = "CRF/FGTS (Caixa)"
     validade_dias = 30
     URL = "https://consulta-crf.caixa.gov.br/consultacrf/pages/consultaEmpregador.jsf"
+    PORTAL_URL = "https://consulta-crf.caixa.gov.br/"
 
     def buscar(self) -> dict:
         if self.tipo != "cnpj":
@@ -19,6 +20,8 @@ class CrfFgts(CertidaoFetcher):
         session.headers.update({"User-Agent": "Mozilla/5.0 (compatible; CertidoesSC/0.1)"})
         try:
             response = session.get(self.URL, timeout=30)
+            if response.status_code in (401, 403):
+                return self.resultado("ACAO_MANUAL", portal_url=self.PORTAL_URL, detalhe="A Caixa bloqueou a consulta automatizada. Abra o portal oficial para emitir o CRF.")
             response.raise_for_status()
             soup = BeautifulSoup(response.text, "html.parser")
             form = soup.find("form")
@@ -46,4 +49,4 @@ class CrfFgts(CertidaoFetcher):
             self.salvar_debug("03_CRF_FGTS_debug.html", enviado.text)
             return self.resultado("VERIFICAR_MANUALMENTE", detalhe="A resposta não trouxe PDF; HTML salvo para diagnóstico.")
         except Exception as exc:
-            return self.resultado("ERRO", erro=str(exc))
+            return self.resultado("ACAO_MANUAL", portal_url=self.PORTAL_URL, detalhe=f"O portal da Caixa não aceitou a consulta automatizada: {exc}")

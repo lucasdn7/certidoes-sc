@@ -10,19 +10,22 @@ from .utils import resposta_e_pdf, url_absoluta
 class Cndt(CertidaoFetcher):
     nome = "CNDT (TST)"
     validade_dias = 180
-    URL = "https://certidao.tst.jus.br/gerarCertidao.faces"
+    URL = "https://cndt-certidao.tst.jus.br/gerarCertidao"
+    PORTAL_URL = "https://cndt-certidao.tst.jus.br/gerarCertidao"
 
     def buscar(self) -> dict:
         session = requests.Session()
         session.headers.update({"User-Agent": "Mozilla/5.0 (compatible; CertidoesSC/0.1)"})
         try:
-            response = session.get("https://certidao.tst.jus.br/", timeout=30)
+            response = session.get(self.URL, timeout=30)
             response.raise_for_status()
             soup = BeautifulSoup(response.text, "html.parser")
             form = soup.find("form")
             if not form:
                 self.salvar_debug("02_CNDT_debug.html", response.text)
-                return self.resultado("VERIFICAR_MANUALMENTE", detalhe="Formulário da CNDT não localizado; HTML salvo para diagnóstico.")
+                return self.resultado("ACAO_MANUAL", portal_url=self.PORTAL_URL, detalhe="O portal da CNDT não disponibilizou um formulário automatizável.")
+            if soup.find(string=lambda text: text and "caracteres exibidos" in text.lower()):
+                return self.resultado("ACAO_MANUAL", portal_url=self.PORTAL_URL, detalhe="O portal exige CAPTCHA. Abra o portal oficial para concluir a emissão.")
             action = url_absoluta(response.url, form.get("action") or response.url)
             data = {field.get("name"): field.get("value", "") for field in form.find_all("input", attrs={"name": True})}
             campo = next((name for name in data if name.lower() in {"nrinscricao", "numero", "cpfcnpj", "documento"}), None)

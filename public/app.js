@@ -22,7 +22,8 @@ function card(result) {
   const ok = result.status === 'OK' || result.status === 'Negativa' || result.status === 'PositivaComEfeitoDeNegativa';
   const title = result.certidao || 'Certidão';
   const detail = result.erro || result.detalhe || result.tipo_resultado || 'Consulta concluída.';
-  return `<article class="result-card"><div class="result-icon ${ok ? 'ok' : 'warn'}">${ok ? '✓' : '!'}</div><div class="result-text"><strong>${title}</strong><span class="result-status ${ok ? 'green' : 'orange'}">${result.status}</span><small>${detail}</small></div>${result.download ? `<button class="download" data-download='${JSON.stringify(result.download)}'>Baixar PDF <b>↓</b></button>` : ''}</article>`;
+  const portal = result.portal_url ? `<a class="portal-link" href="${result.portal_url}" target="_blank" rel="noopener">Abrir portal oficial ↗</a>` : '';
+  return `<article class="result-card"><div class="result-icon ${ok ? 'ok' : 'warn'}">${ok ? '✓' : '!'}</div><div class="result-text"><strong>${title}</strong><span class="result-status ${ok ? 'green' : 'orange'}">${result.status}</span><small>${detail}</small></div>${result.download ? `<button class="download" data-download='${JSON.stringify(result.download)}'>Baixar PDF <b>↓</b></button>` : portal}</article>`;
 }
 
 form.addEventListener('submit', async (event) => {
