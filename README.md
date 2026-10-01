@@ -1,50 +1,44 @@
-# Certidões SC — protótipo desktop
+# Certidões SC — aplicação web para Vercel
 
-Protótipo local em Python/Tkinter para consultar e tentar baixar:
+Aplicação web serverless para consultar e tentar baixar, em uma única operação:
 
 - **CND Estadual SC (SEF-SC)** via API REST, salvando o PDF retornado em Base64;
 - **CNDT (TST)** via sessão HTTP, procurando o PDF na resposta;
 - **CRF/FGTS (Caixa)** via sessão HTTP, procurando o PDF na resposta para CNPJ.
 
-Os arquivos são organizados em `output/<documento>/<AAAA-MM-DD>/`. Cada consulta também cria `log.json`. Quando o portal não entrega um PDF ou muda o layout, o HTML/JSON de resposta é salvo na mesma pasta para diagnóstico.
+A interface está em `public/` e a API em `api/index.py`. O projeto não grava CPF/CNPJ nem PDFs no GitHub: os PDFs retornados são mantidos na memória da requisição e enviados ao navegador como download.
 
-## Instalação
+## Publicar na Vercel sem instalar Git
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate       # Windows: .venv\\Scripts\\activate
-pip install -r requirements.txt
-cp .env.example .env
-# Edite .env e informe o CPF solicitante da SEF-SC
-python main.py
-```
+1. Entre em [vercel.com](https://vercel.com) com sua conta.
+2. Clique em **Add New → Project**.
+3. Em **Import Git Repository**, escolha o GitHub e autorize o repositório privado `lucasdn7/certidoes-sc`.
+4. Selecione `certidoes-sc` e clique em **Import**.
+5. Mantenha o framework como **Other** e clique em **Deploy**.
+6. Abra o domínio gerado pela Vercel.
 
-O campo de CPF solicitante também pode ser preenchido diretamente na interface; nesta versão ele não é lido automaticamente do `.env` para evitar expor dados no formulário.
+Após o deploy, a página já estará acessível pelo navegador do computador da empresa. Nenhum programa local será necessário.
 
 ## Uso
 
-1. Informe um CPF ou CNPJ válido em quantidade de dígitos.
-2. Para CND Estadual SC, informe o CPF do solicitante autorizado.
-3. Selecione as certidões desejadas.
+1. Informe o CPF/CNPJ.
+2. Informe o CPF do solicitante autorizado na SEF-SC para obter a CND Estadual.
+3. Selecione os documentos.
 4. Clique em **Emitir e baixar certidões**.
-5. Consulte os PDFs e o `log.json` em `output`.
+5. Baixe os PDFs retornados na seção de resultados.
 
-## Validação rápida sem emitir documentos
+## Limitações da hospedagem serverless
+
+- A Vercel impõe limite de tempo para funções. O arquivo define `maxDuration: 60`; planos/contas podem aplicar limite inferior.
+- Portais externos podem exigir CAPTCHA, login, certificado digital, bloquear datacenters ou alterar o HTML. Nesses casos a aplicação informa o diagnóstico em vez de fabricar um PDF.
+- CND Federal, municípios Betha e certidão de falência ainda não estão nesta primeira versão web.
+- Antes de uso institucional, proteja o projeto com autenticação e restrição de acesso. Não publique a URL sem controle, pois ela consulta documentos oficiais.
+
+## Desenvolvimento local opcional
 
 ```bash
-python -m compileall -q .
-python - <<'PY'
-from certidoes.utils import validar_documento
-assert validar_documento('12.345.678/0001-95')[0]
-assert validar_documento('123.456.789-01')[0]
-print('Validação local OK')
-PY
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python main.py                  # interface desktop legada
 ```
-
-## Limitações importantes
-
-- A disponibilidade e o fluxo dos portais são externos ao aplicativo. Não há garantia de que os formulários mantenham os mesmos campos ou endpoints.
-- A emissão de certidões reais requer documentos autorizados e pode depender de validações do próprio órgão.
-- A CND Federal, municípios Betha e certidão de falência não fazem parte deste protótipo inicial.
-- Esta versão não tenta contornar CAPTCHA, login, certificado digital ou bloqueios do portal. Se um portal exigir isso, o resultado será diagnóstico/manual, não um PDF inventado.
-- O CRF/FGTS não é aplicável a CPF comum; a interface permite a seleção, mas retorna `NAO_APLICAVEL` para CPF.

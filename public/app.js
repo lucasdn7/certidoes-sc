@@ -1,0 +1,53 @@
+const form = document.querySelector('#form');
+const button = document.querySelector('#submit');
+const statusBox = document.querySelector('#status');
+const resultsBox = document.querySelector('#results');
+const resultList = document.querySelector('#result-list');
+const resultCount = document.querySelector('#result-count');
+
+function showStatus(message, type = 'info') {
+  statusBox.hidden = false;
+  statusBox.className = `status ${type}`;
+  statusBox.textContent = message;
+}
+
+function downloadPdf(download) {
+  const link = document.createElement('a');
+  link.href = `data:application/pdf;base64,${download.conteudo_base64}`;
+  link.download = download.nome;
+  link.click();
+}
+
+function card(result) {
+  const ok = result.status === 'OK' || result.status === 'Negativa' || result.status === 'PositivaComEfeitoDeNegativa';
+  const title = result.certidao || 'Certidão';
+  const detail = result.erro || result.detalhe || result.tipo_resultado || 'Consulta concluída.';
+  return `<article class="result-card"><div class="result-icon ${ok ? 'ok' : 'warn'}">${ok ? '✓' : '!'}</div><div class="result-text"><strong>${title}</strong><span class="result-status ${ok ? 'green' : 'orange'}">${result.status}</span><small>${detail}</small></div>${result.download ? `<button class="download" data-download='${JSON.stringify(result.download)}'>Baixar PDF <b>↓</b></button>` : ''}</article>`;
+}
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const documento = document.querySelector('#documento').value;
+  const cpf_solicitante = document.querySelector('#cpf_solicitante').value;
+  const certidoes = [...document.querySelectorAll('input[name="certidoes"]:checked')].map(input => input.value);
+  if (!certidoes.length) return showStatus('Selecione pelo menos uma certidão.', 'error');
+  button.disabled = true;
+  button.innerHTML = '<span>Consultando portais oficiais...</span><b class="spin">◌</b>';
+  resultsBox.hidden = true;
+  showStatus('A consulta pode levar alguns segundos. Não feche esta página.', 'info');
+  try {
+    const response = await fetch('/api/certidoes', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ documento, cpf_solicitante, certidoes }) });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || 'Não foi possível realizar a consulta.');
+    resultList.innerHTML = payload.resultados.map(card).join('');
+    resultCount.textContent = `${payload.resultados.length} selecionada(s)`;
+    resultsBox.hidden = false;
+    document.querySelectorAll('.download').forEach(btn => btn.addEventListener('click', () => downloadPdf(JSON.parse(btn.dataset.download))));
+    showStatus('Consulta concluída. Baixe abaixo os PDFs que foram retornados pelos portais.', 'success');
+  } catch (error) {
+    showStatus(error.message, 'error');
+  } finally {
+    button.disabled = false;
+    button.innerHTML = '<span>Emitir e baixar certidões</span><b>↗</b>';
+  }
+});
