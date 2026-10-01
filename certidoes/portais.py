@@ -73,7 +73,7 @@ class CndMunicipalFlorianopolis(PortalManualFetcher):
         super().__init__(
             documento,
             "CND Municipal — Florianópolis (PMF)",
-            "https://nfps-e.pmf.sc.gov.br",
+            "https://www.pmf.sc.gov.br/entidades/serv_pagina_print.php?acao=open&id=3686",
             "A PMF utiliza sistema próprio e pode exigir certificado digital A1. Emita pelo portal oficial.",
             output_dir,
         )

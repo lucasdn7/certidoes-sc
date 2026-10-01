@@ -1,7 +1,5 @@
 
 
-## Fluxo híbrido com CAPTCHA e certificado
+## Auditoria dos links oficiais
 
-Na tela de resultados, documentos que não puderem ser baixados automaticamente terão os botões **Abrir portal oficial** e **Anexar PDF emitido**. O botão do portal copia o CNPJ e abre o endereço oficial em uma nova aba. Depois de resolver CAPTCHA, fazer login ou usar certificado digital no portal do órgão, baixe o PDF e volte à aplicação para anexá-lo.
-
-O formulário de anexação valida o tipo PDF e permite registrar número da certidão, data de emissão e validade em dias. O status fica como `REGISTRADA` e os metadados são guardados no navegador via `localStorage`, separados por documento e certidão. Nesta etapa, o PDF anexado permanece disponível somente na sessão atual do navegador; armazenamento permanente em Supabase Storage ou Vercel Blob deve ser configurado antes de uso institucional.
+Os botões foram conferidos em 01/10/2026. A Receita Federal abre `#/home/cnpj` para CNPJ e `#/home/cpf` para CPF; a CNDT abre `https://cndt-certidao.tst.jus.br/gerarCertidao`; a Caixa abre `https://consulta-crf.caixa.gov.br/consultacrf/pages/consultaEmpregador.jsf`; a SEF-SC usa o formulário `SolicitacaoCnd.aspx`; o TJ-SC usa `https://certidoes.tjsc.jus.br/`; e a CND municipal de Florianópolis usa a página específica de pessoa jurídica `id=3686` da Fazenda Municipal. Os portais Betha continuam sendo selecionados por município porque cada cidade possui uma entrada própria.

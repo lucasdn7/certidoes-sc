@@ -2,7 +2,7 @@ const form=document.querySelector('#form'),button=document.querySelector('#submi
 const sessionFiles=new Map();
 let currentDocument='';
 const PORTALS={
- federal:'https://servicos.receitafederal.gov.br/servico/certidoes/',estadual:'https://sat.sef.sc.gov.br/tax.NET/Sat.CtaCte.Web/SolicitacaoCnd.aspx',cndt:'https://cndt-certidao.tst.jus.br/gerarCertidao',fgts:'https://consulta-crf.caixa.gov.br/consultacrf/pages/consultaEmpregador.jsf',pge:'https://www.pge.sc.gov.br/divida-ativa/',pmf:'https://nfps-e.pmf.sc.gov.br/',falencia:'https://certidoes.tjsc.jus.br/'
+ federal:'https://servicos.receitafederal.gov.br/servico/certidoes/',estadual:'https://sat.sef.sc.gov.br/tax.NET/Sat.CtaCte.Web/SolicitacaoCnd.aspx',cndt:'https://cndt-certidao.tst.jus.br/gerarCertidao',fgts:'https://consulta-crf.caixa.gov.br/consultacrf/pages/consultaEmpregador.jsf',pge:'https://www.pge.sc.gov.br/divida-ativa/',pmf:'https://www.pmf.sc.gov.br/entidades/serv_pagina_print.php?acao=open&id=3686',falencia:'https://certidoes.tjsc.jus.br/'
 };
 function portalFor(tipo,fallback){if(tipo==='federal')return `${PORTALS.federal}#/home/${currentDocument.length===11?'cpf':'cnpj'}`;return fallback||PORTALS[tipo]||'#'}
 function showStatus(message,type='info'){statusBox.hidden=false;statusBox.className=`status ${type}`;statusBox.textContent=message}
